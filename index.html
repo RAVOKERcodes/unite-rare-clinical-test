@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="groq-api-key" content="" id="groq-api-key">
     <script src="config.js"></script>
     <script>
-        // Set API key from meta tag if available (for development)
-        const metaKey = document.querySelector('meta[name="groq-api-key"]')?.content;
-        if (metaKey) {
-            CONFIG.GROQ_API_KEY = metaKey;
-        }
+        // Try to get API key from different sources
+        CONFIG.GROQ_API_KEY = 
+            document.querySelector('meta[name="groq-api-key"]')?.content ||
+            process.env.GROQ_API_KEY ||
+            CONFIG.GROQ_API_KEY;
     </script>
     <title>Clinical Trials API Search Tool</title>
     <style>
@@ -1214,11 +1215,11 @@
                 diseaseDescEl.textContent = 'Loading disease information...';
                 diseaseInfo.style.display = 'block';
 
-                // Get API key from environment variable
-                const apiKey = process.env.GROQ_API_KEY || CONFIG.GROQ_API_KEY;
+                // Get API key and validate
+                const apiKey = CONFIG.GROQ_API_KEY;
                 
                 if (!apiKey) {
-                    throw new Error('GROQ API key not found. Please configure it in GitHub secrets.');
+                    throw new Error('API key not configured. Please set up the API key in config.js or as an environment variable.');
                 }
 
                 const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
@@ -1286,7 +1287,7 @@
                 diseaseDescEl.innerHTML = `
                     <div class="error-message">
                         Failed to load disease information: ${error.message}
-                        Please check your API key configuration.
+                        ${!CONFIG.GROQ_API_KEY ? '<br>Please configure the GROQ API key in GitHub secrets.' : ''}
                     </div>
                 `;
             }

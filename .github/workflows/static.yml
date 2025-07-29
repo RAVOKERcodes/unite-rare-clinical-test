@@ -13,9 +13,12 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     
-    - name: Build and Deploy
-      env:
-        GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+    - name: Configure API Key
       run: |
-        # Add your build/deploy commands here
-        echo "GROQ_API_KEY is configured"
+        sed -i "s/content=\"\"/content=\"${{ secrets.GROQ_API_KEY }}\"/" index.html
+        
+    - name: Update config.js
+      run: |
+        echo "CONFIG.GROQ_API_KEY = '${{ secrets.GROQ_API_KEY }}';" >> config.js
+
+    # Add your deployment steps here

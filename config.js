@@ -1,8 +1,12 @@
 const CONFIG = {
-    GROQ_API_KEY: process.env.GROQ_API_KEY || ''
+    GROQ_API_KEY: '' // Will be populated from GitHub secrets
 };
 
-// If running locally, try to get the API key from environment variables
-if (typeof process !== 'undefined' && process.env.GROQ_API_KEY) {
-    CONFIG.GROQ_API_KEY = process.env.GROQ_API_KEY;
+// Make CONFIG available globally
+if (typeof window !== 'undefined') {
+    window.CONFIG = CONFIG;
+}
+
+if (typeof module !== 'undefined') {
+    module.exports = CONFIG;
 }
