@@ -1206,11 +1206,18 @@
                 diseaseDescEl.textContent = 'Loading disease information...';
                 diseaseInfo.style.display = 'block';
 
+                // Get API key from environment variable (will be replaced by GitHub Actions)
+                const apiKey = process.env.GROQ_API_KEY || '';
+                if (!apiKey) {
+                    console.error('GROQ_API_KEY is not set');
+                    throw new Error('API key not configured');
+                }
+
                 const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': 'Bearer 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'
+                        'Authorization': `Bearer ${apiKey}`
                     },
                     body: JSON.stringify({
                         model: 'gemma2-9b-it',
