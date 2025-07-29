@@ -1,6 +1,5 @@
 const CONFIG = {
-    // This will be set from environment variables or GitHub secrets
-    GROQ_API_KEY: ''
+    GROQ_API_KEY: process.env.GROQ_API_KEY || ''
 };
 
 // If running locally, try to get the API key from environment variables
