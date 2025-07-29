@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="groq-api-key" content="YOUR_GROQ_API_KEY_HERE">
     <title>Clinical Trials API Search Tool</title>
     <style>
         body {
@@ -1206,11 +1207,11 @@
                 diseaseDescEl.textContent = 'Loading disease information...';
                 diseaseInfo.style.display = 'block';
 
-                // Get API key from environment variable (will be replaced by GitHub Actions)
-                const apiKey = process.env.GROQ_API_KEY || '';
+                // Get API key from a meta tag in the HTML head
+                const apiKey = document.querySelector('meta[name="groq-api-key"]')?.content || '';
                 if (!apiKey) {
                     console.error('GROQ_API_KEY is not set');
-                    throw new Error('API key not configured');
+                    throw new Error('API key not configured. Please set up the API key in the HTML head.');
                 }
 
                 const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
